@@ -1,0 +1,36 @@
+Nombre: SERVICIOS
+Tipo: Servidor
+IP: 192.168.10.3
+Ubicación: Campus Uno
+VLANs: no aplica
+Servicios de Red: OSPF, VLANs, DHCP, DNS, NTP, SSH, SNMP, Syslog
+Capa de Red: Acceso
+Fecha: 2025-04-22 18:32:46
+------------------------------------------------------------
+Nombre: PROCESOS
+Tipo: dispositivo final
+IP: 192.168.10.4
+Ubicación: Campus Uno
+VLANs: Vlan20
+Servicios de Red: OSPF, VLANs, DHCP, SSH, SNMP, Syslog
+Capa de Red: Acceso
+Fecha: 2025-04-22 18:34:09
+------------------------------------------------------------
+Nombre: IMPRESION FOTOCOPIADORAS
+Tipo: dispositivo final
+IP: 192.168.10.5
+Ubicación: Campus Uno
+VLANs: no aplica
+Servicios de Red: DHCP, DNS, NTP, SSH, SNMP, Syslog
+Capa de Red: Acceso
+Fecha: 2025-04-22 18:35:05
+------------------------------------------------------------
+Nombre: SITELOCAL
+Tipo: access point
+IP: 192.168.10.1
+Ubicación: Campus Uno
+VLANs: no aplica
+Servicios de Red: OSPF, DHCP, DNS, NTP, SSH, SNMP, Syslog
+Capa de Red: distribución
+Fecha: 2025-04-22 18:36:52
+------------------------------------------------------------
