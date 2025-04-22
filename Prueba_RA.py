@@ -22,6 +22,25 @@ def solicitar_input(mensaje, validacion=None):
             continue
         return dato
 
+def seleccionar_servicios():
+    servicios = [
+        "OSPF",
+        "VLANs",
+        "DHCP",
+        "DNS",
+        "NTP",
+        "SSH",
+        "SNMP",
+        "Syslog"
+    ]
+    print("\n🛠️ Seleccione los servicios habilitados en este dispositivo:")
+    seleccionados = []
+    for servicio in servicios:
+        respuesta = input(f"¿{servicio}? (s/n): ").strip().lower()
+        if respuesta == "s":
+            seleccionados.append(servicio)
+    return seleccionados
+
 def ingresar_dispositivo():
     print("\n➕ Registro de Nuevo Dispositivo")
 
@@ -31,6 +50,16 @@ def ingresar_dispositivo():
     ip = solicitar_input("🌐 Dirección IP: ", validar_ip)
     ubicacion = solicitar_input("📍 Ubicación física: ")
 
+    # VLANs
+    vlans = input("\n📶 Ingrese las VLANs configuradas (Ej: VLAN10: Administración, VLAN20: Estudiantes): ").strip()
+
+    # Servicios de red
+    servicios = seleccionar_servicios()
+
+    # Capa de red
+    capa = solicitar_input("\n🏗️ Ingrese la capa de red (Acceso, Distribución, Núcleo): ", 
+                            lambda c: c.lower() in ["acceso", "distribución", "núcleo"])
+
     fecha_registro = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     dispositivo = {
@@ -38,6 +67,9 @@ def ingresar_dispositivo():
         "Tipo": tipo,
         "IP": ip,
         "Ubicación": ubicacion,
+        "VLANs": vlans,
+        "Servicios de Red": ", ".join(servicios),
+        "Capa de Red": capa,
         "Fecha": fecha_registro
     }
 
@@ -48,7 +80,7 @@ def guardar_dispositivo(dispositivo):
     with open(ARCHIVO, "a") as f:
         for clave, valor in dispositivo.items():
             f.write(f"{clave}: {valor}\n")
-        f.write("-" * 40 + "\n")
+        f.write("-" * 60 + "\n")
 
 def buscar_dispositivo():
     if not verificar_existencia_archivo():
@@ -60,7 +92,7 @@ def buscar_dispositivo():
     with open(ARCHIVO, "r") as f:
         for linea in f:
             bloque += linea
-            if linea.strip() == "-" * 40:
+            if linea.strip() == "-" * 60:
                 if criterio in bloque.lower():
                     print("\n📄 Dispositivo encontrado:\n" + bloque)
                     encontrado = True
