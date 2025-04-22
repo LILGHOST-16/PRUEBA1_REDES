@@ -1,4 +1,3 @@
-PRUEBA1 R.A Emanuel Berrios
 import re
 import ipaddress
 from datetime import datetime

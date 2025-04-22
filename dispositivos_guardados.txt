@@ -1,0 +1,6 @@
+Nombre: Router
+Tipo: Router
+IP: 192.77.65.2
+Ubicación: renca
+Fecha: 2025-04-22 03:27:55
+----------------------------------------
