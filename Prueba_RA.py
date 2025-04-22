@@ -2,7 +2,7 @@ import re
 import ipaddress
 from datetime import datetime
 
-ARCHIVO = "dispositivos_guardados.txt"
+ARCHIVO = "Dispositivos_Guardados.txt"
 
 def validar_ip(ip):
     try:
@@ -33,7 +33,7 @@ def seleccionar_servicios():
         "SNMP",
         "Syslog"
     ]
-    print("\n🛠️ Seleccione los servicios habilitados en este dispositivo:")
+    print("\n🛰️ Seleccione los servicios habilitados en este dispositivo:")
     seleccionados = []
     for servicio in servicios:
         respuesta = input(f"¿{servicio}? (s/n): ").strip().lower()
@@ -48,16 +48,16 @@ def ingresar_dispositivo():
     tipo = solicitar_input("🔌 Tipo (Switch, Router, Access Point): ", 
                             lambda t: t.lower() in ["switch", "router", "access point"])
     ip = solicitar_input("🌐 Dirección IP: ", validar_ip)
-    ubicacion = solicitar_input("📍 Ubicación física: ")
+    ubicacion = solicitar_input("📍 Ubicación Física: ")
 
     # VLANs
-    vlans = input("\n📶 Ingrese las VLANs configuradas (Ej: VLAN10: Administración, VLAN20: Estudiantes): ").strip()
+    vlans = input("\n📶 Ingrese las VLANs configuradas: ").strip()
 
     # Servicios de red
     servicios = seleccionar_servicios()
 
     # Capa de red
-    capa = solicitar_input("\n🏗️ Ingrese la capa de red (Acceso, Distribución, Núcleo): ", 
+    capa = solicitar_input("\n📡 Ingrese la capa de red (Acceso, Distribución, Núcleo): ", 
                             lambda c: c.lower() in ["acceso", "distribución", "núcleo"])
 
     fecha_registro = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -128,12 +128,12 @@ def mostrar_menu():
     }
     while True:
         print("\n📋 MENÚ PRINCIPAL")
-        print("1️⃣  Ingresar nuevo dispositivo")
-        print("2️⃣  Buscar dispositivo")
-        print("3️⃣  Limpiar todos los registros")
-        print("4️⃣  Salir")
+        print("1️⃣  📲 Ingresar Nuevo Dispositivo")
+        print("2️⃣  🔍 Buscar Dispositivo")
+        print("3️⃣  🧹 Limpiar Todos Los Registros")
+        print("4️⃣  🚪 Salir")
 
-        eleccion = input("Seleccione una opción (1-4): ").strip()
+        eleccion = input("Seleccione Una Opción (1-4): ").strip()
         accion = opciones.get(eleccion)
         if accion:
             accion()
@@ -141,7 +141,7 @@ def mostrar_menu():
             print("⚠️ Opción inválida. Intente de nuevo.\n")
 
 def salir():
-    print("\n👋 Cerrando el programa. ¡Hasta Luego, Nos Vemos Pronto!")
+    print("\n👋 Cerrando el programa. ¡Hasta Luego, Nos Vemos Pronto 😎👍!")
     exit()
 
 if __name__ == "__main__":
