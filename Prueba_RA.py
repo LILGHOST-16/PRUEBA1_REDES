@@ -141,7 +141,7 @@ def mostrar_menu():
             print("⚠️ Opción inválida. Intente de nuevo.\n")
 
 def salir():
-    print("\n👋 Cerrando el programa. ¡Hasta luego!")
+    print("\n👋 Cerrando el programa. ¡Hasta Luego, Nos Vemos Pronto!")
     exit()
 
 if __name__ == "__main__":

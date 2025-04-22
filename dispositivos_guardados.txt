@@ -1,9 +1,0 @@
-Nombre: Casa Matriz
-Tipo: Switch
-IP: 192.168.10.1
-Ubicación: Renca
-VLANs: VLAN30: Voz
-Servicios de Red: OSPF, VLANs, DHCP, DNS, SSH
-Capa de Red: Acceso
-Fecha: 2025-04-22 16:57:09
-------------------------------------------------------------
