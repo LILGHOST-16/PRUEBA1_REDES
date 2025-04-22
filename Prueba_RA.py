@@ -45,8 +45,8 @@ def ingresar_dispositivo():
     print("\n➕ Registro de Nuevo Dispositivo")
 
     nombre = solicitar_input("🖋️ Nombre: ")
-    tipo = solicitar_input("🔌 Tipo (Switch, Router, Access Point): ", 
-                            lambda t: t.lower() in ["switch", "router", "access point"])
+    tipo = solicitar_input("🔌 Tipo (Switch, Router, Access Point, Impresora, Servidor, Cloud): ", 
+                            lambda t: t.lower() in ["switch", "router", "access point", "servidor", "cloud"])
     ip = solicitar_input("🌐 Dirección IP: ", validar_ip)
     ubicacion = solicitar_input("📍 Ubicación Física: ")
 
