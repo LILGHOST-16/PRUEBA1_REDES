@@ -1,8 +1,9 @@
 import re
 import ipaddress
+import json
 from datetime import datetime
 
-ARCHIVO = "Dispositivos_Guardados.txt"
+ARCHIVO = "Dispositivos_Guardados.json"
 
 def validar_ip(ip):
     try:
@@ -15,50 +16,52 @@ def solicitar_input(mensaje, validacion=None):
     while True:
         dato = input(mensaje).strip()
         if not dato:
-            print("⚠️ No puede estar vacío. Intente de nuevo.")
+            print("\u26a0\ufe0f No puede estar vac\u00edo. Intente de nuevo.")
             continue
         if validacion and not validacion(dato):
-            print("⚠️ Dato inválido. Intente de nuevo.")
+            print("\u26a0\ufe0f Dato inv\u00e1lido. Intente de nuevo.")
             continue
         return dato
 
 def seleccionar_servicios():
-    servicios = [
-        "OSPF",
-        "VLANs",
-        "DHCP",
-        "DNS",
-        "NTP",
-        "SSH",
-        "SNMP",
-        "Syslog"
-    ]
-    print("\n🛰️ Seleccione los servicios habilitados en este dispositivo:")
+    servicios = ["OSPF", "VLANs", "DHCP", "DNS", "NTP", "SSH", "SNMP", "Syslog"]
+    print("\n\U0001f6f0\ufe0f Seleccione los servicios habilitados en este dispositivo:")
     seleccionados = []
     for servicio in servicios:
-        respuesta = input(f"¿{servicio}? (s/n): ").strip().lower()
+        respuesta = input(f"\u00bf{servicio}? (s/n): ").strip().lower()
         if respuesta == "s":
             seleccionados.append(servicio)
     return seleccionados
+
+def cargar_dispositivos():
+    try:
+        with open(ARCHIVO, "r") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+
+def guardar_dispositivos(dispositivos):
+    with open(ARCHIVO, "w") as f:
+        json.dump(dispositivos, f, indent=4)
+
+def guardar_dispositivo(dispositivo):
+    dispositivos = cargar_dispositivos()
+    dispositivos.append(dispositivo)
+    guardar_dispositivos(dispositivos)
 
 def ingresar_dispositivo():
     print("\n➕ Registro de Nuevo Dispositivo")
 
     nombre = solicitar_input("✏️  Nombre: ")
-    tipo = solicitar_input("🔌 Tipo (Switch, Router, Access Point, Dispositivo Final, Servidor, Cloud): ", 
+    tipo = solicitar_input("🔌 Tipo (Switch, Router, Access Point, Dispositivo Final, Servidor, Cloud): ",
                             lambda t: t.lower() in ["switch", "router", "access point", "dispositivo final", "servidor", "cloud"])
-    ip = solicitar_input("🌐 Dirección IP: ", validar_ip)
-    ubicacion = solicitar_input("📍 Ubicación Física: ")
+    ip = solicitar_input("🌐 Direcci\u00f3n IP: ", validar_ip)
+    ubicacion = solicitar_input("📍 Ubicaci\u00f3n F\u00edsica: ")
 
-    # VLANs
     vlans = input("\n📶 Ingrese las VLANs configuradas: ").strip()
-
-    # Servicios de red
     servicios = seleccionar_servicios()
-
-    # Capa de red
-    capa = solicitar_input("\n📡 Ingrese la capa de red (Acceso, Distribución, Núcleo): ", 
-                            lambda c: c.lower() in ["acceso", "distribución", "núcleo"])
+    capa = solicitar_input("\n📡 Ingrese la capa de red (Acceso, Distribuci\u00f3n, N\u00facleo): ",
+                            lambda c: c.lower() in ["acceso", "distribuci\u00f3n", "n\u00facleo"])
 
     fecha_registro = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -66,9 +69,9 @@ def ingresar_dispositivo():
         "Nombre": nombre,
         "Tipo": tipo,
         "IP": ip,
-        "Ubicación": ubicacion,
+        "Ubicacion": ubicacion,
         "VLANs": vlans,
-        "Servicios de Red": ", ".join(servicios),
+        "Servicios de Red": servicios,
         "Capa de Red": capa,
         "Fecha": fecha_registro
     }
@@ -76,48 +79,28 @@ def ingresar_dispositivo():
     guardar_dispositivo(dispositivo)
     print("✅ Dispositivo guardado exitosamente.\n")
 
-def guardar_dispositivo(dispositivo):
-    with open(ARCHIVO, "a") as f:
-        for clave, valor in dispositivo.items():
-            f.write(f"{clave}: {valor}\n")
-        f.write("-" * 60 + "\n")
-
 def buscar_dispositivo():
-    if not verificar_existencia_archivo():
+    dispositivos = cargar_dispositivos()
+    if not dispositivos:
+        print("⚠️ No existen registros guardados.\n")
         return
     criterio = input("\n🔎 Buscar dispositivo por Nombre o IP: ").strip().lower()
-    encontrado = False
-    bloque = ""
-
-    with open(ARCHIVO, "r") as f:
-        for linea in f:
-            bloque += linea
-            if linea.strip() == "-" * 60:
-                if criterio in bloque.lower():
-                    print("\n📄 Dispositivo encontrado:\n" + bloque)
-                    encontrado = True
-                bloque = ""
-    if not encontrado:
+    encontrados = [d for d in dispositivos if criterio in d["Nombre"].lower() or criterio in d["IP"]]
+    if encontrados:
+        for d in encontrados:
+            print("\n📄 Dispositivo encontrado:")
+            for clave, valor in d.items():
+                print(f"{clave}: {valor}")
+    else:
         print("❌ No se encontraron coincidencias.\n")
 
 def limpiar_registros():
-    confirmacion = input("\n🗑️ ¿Eliminar todos los registros? (s/n): ").strip().lower()
+    confirmacion = input("\n🗑️ \u00bfEliminar todos los registros? (s/n): ").strip().lower()
     if confirmacion == "s":
-        open(ARCHIVO, "w").close()
+        guardar_dispositivos([])
         print("✅ Todos los registros fueron eliminados.\n")
     else:
         print("❌ Cancelado.\n")
-
-def verificar_existencia_archivo():
-    try:
-        with open(ARCHIVO, "r") as f:
-            if not f.read().strip():
-                print("⚠️ No existen registros guardados.\n")
-                return False
-            return True
-    except FileNotFoundError:
-        print("⚠️ Archivo de registros no encontrado.\n")
-        return False
 
 def mostrar_menu():
     opciones = {
@@ -127,7 +110,7 @@ def mostrar_menu():
         "4": salir
     }
     while True:
-        print("\n📋 MENÚ PRINCIPAL")
+        print("\n📋 MEN\u00da PRINCIPAL")
         print("1️⃣  📲 Ingresar Nuevo Dispositivo")
         print("2️⃣  🔍 Buscar Dispositivo")
         print("3️⃣  🧹 Limpiar Todos Los Registros")
